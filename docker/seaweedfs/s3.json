@@ -1,0 +1,18 @@
+{
+  "identities": [
+    {
+      "name": "uploader-admin",
+      "credentials": [
+        {
+          "accessKey": "admin",
+          "secretKey": "admin"
+        }
+      ],
+      "actions": ["Admin", "Read", "Write", "List", "Tagging"]
+    },
+    {
+      "name": "anonymous",
+      "actions": ["Read", "List"]
+    }
+  ]
+}

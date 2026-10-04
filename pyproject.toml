@@ -1,0 +1,57 @@
+[project]
+name = "uploader"
+version = "0.1.0"
+description = "Reliable HLS segment uploader for S3-compatible storage"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+	"aiobotocore>=2.25.0",
+	"prometheus-client>=0.22.0",
+	"python-dotenv>=1.2.4",
+]
+
+[project.scripts]
+hls-uploader-worker = "scripts.worker:main"
+hls-uploader-emulator = "scripts.emulator:main"
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/uploader", "scripts"]
+
+[dependency-groups]
+dev = [
+	"bandit>=1.8.0",
+	"mypy>=1.19.1",
+	"pre-commit>=4.0.0",
+	"pytest>=8.4.0",
+	"ruff>=0.8.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+
+[tool.mypy]
+files = ["src/uploader", "scripts"]
+mypy_path = ["src"]
+python_version = "3.14"
+strict = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["aiobotocore.*", "botocore.*", "prometheus_client.*"]
+ignore_missing_imports = true
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101"]

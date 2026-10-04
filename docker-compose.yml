@@ -1,0 +1,55 @@
+services:
+  seaweedfs:
+    image: chrislusf/seaweedfs:3.91
+    command: server -s3 -s3.port=8333 -s3.config=/etc/seaweedfs/s3.json -volume.max=1 -ip=seaweedfs
+    ports:
+      - "8333:8333"  
+    volumes:
+      - seaweed-data:/data
+      - ./docker/seaweedfs/s3.json:/etc/seaweedfs/s3.json:ro
+
+  uploader:
+    build: .
+    restart: on-failure
+    depends_on:
+      - seaweedfs
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/recordings:/recordings
+      - uploader-state:/state
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+
+  grafana:
+    image: grafana/grafana:12.0.1
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards:ro
+
+volumes:
+  seaweed-data:
+  uploader-state:
+  prometheus-data:
+  grafana-data:

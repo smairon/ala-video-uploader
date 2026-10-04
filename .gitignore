@@ -1,0 +1,56 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+*$py.class
+build/
+dist/
+wheels/
+*.egg-info
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+site/
+
+# Python tool caches and reports
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.tox/
+.nox/
+.hypothesis/
+.pyre/
+.pytype/
+*.py,cover
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Local environment variables and credentials
+.env
+.env.*
+!.env.example
+
+# Local uploader state and generated HLS recordings
+data/recordings/
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+*.log
+
+# Docker local overrides
+docker-compose.override.yml
+compose.override.yaml
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+data/
